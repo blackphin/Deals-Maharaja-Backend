@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Boolean, Integer, String
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
-from database import Base
+from .database import Base
 
 
 class Users(Base):

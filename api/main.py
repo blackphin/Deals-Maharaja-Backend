@@ -5,10 +5,10 @@ from pydantic import BaseModel
 
 from sqlalchemy.orm import Session
 
-import models
-import schemas
-import utils
-from database import engine, get_db
+from . import models
+from . import schemas
+from . import utils
+from .database import engine, get_db
 
 
 app = FastAPI()
