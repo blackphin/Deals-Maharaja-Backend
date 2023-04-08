@@ -16,6 +16,11 @@ models.Base.metadata.create_all(bind=engine)
 # db: Session = Depends(get_db)
 
 
+@app.get("/", status_code=status.HTTP_200_OK)
+def hello():
+    return {"message": "Hello World"}
+
+
 @app.get("/login", status_code=status.HTTP_200_OK, response_model=schemas.AccountDetails)
 def login(payLoad: schemas.Login, db: Session = Depends(get_db)):
     user_data = db.query(models.Users).filter(
