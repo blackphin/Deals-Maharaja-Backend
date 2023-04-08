@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "deals-maharaja-backend"
+version = "0.1.0"
+description = ""
+authors = ["Shivansh Goel <shivanshgoel009@gmail.com>"]
+readme = "README.md"
+packages = [{include = "deals_maharaja_backend"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = {extras = ["all"], version = "^0.95.0"}
+psycopg2 = "^2.9.6"
+sqlalchemy = "^2.0.9"
+ruff = "^0.0.261"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+
+
+[tool.poetry.group.dev.dependencies]
+autopep8 = "^2.0.2"
+mypy = "^1.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
