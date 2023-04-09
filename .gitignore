@@ -7,7 +7,7 @@
 .vscode
 api/.env
 api/__pycache__
-# poetry.lock
-# pyproject.toml
+poetry.lock
+pyproject.toml
 
 # api/

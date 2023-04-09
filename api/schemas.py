@@ -5,7 +5,6 @@ from datetime import datetime
 # Request Schemas
 
 class CreateAccount(BaseModel):
-    user_id: str
     first_name: str
     last_name: str
     email: EmailStr
@@ -22,6 +21,15 @@ class CreateOrder(BaseModel):
     user_id: str
     email: EmailStr
     link: str
+
+
+class GetOrders(BaseModel):
+    user_id: str
+
+
+class AllAccounts(BaseModel):
+    type: str
+    password: str
 
 
 # Response Schemas
