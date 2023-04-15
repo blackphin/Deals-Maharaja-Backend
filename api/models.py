@@ -27,3 +27,14 @@ class Orders(Base):
     user_id = Column(Integer, nullable=False)
     email = Column(String, nullable=False)
     link = Column(String, nullable=False)
+
+
+class Addresses(Base):
+    __tablename__ = "addresses"
+
+    address_id = Column(Integer, primary_key=True, nullable=False)
+    user_id = Column(Integer, nullable=False)
+    address = Column(String, nullable=False)
+    city = Column(String, nullable=False)
+    state = Column(String, nullable=False)
+    pincode = Column(String, nullable=False)

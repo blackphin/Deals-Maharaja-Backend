@@ -2,12 +2,6 @@
 .venv
 
 # Cache
-.mypy_cache
-.ruff_cache
 .vscode
-api/.env
-api/__pycache__
-poetry.lock
-pyproject.toml
-
-# api/
+.env
+__pycache__

@@ -32,6 +32,23 @@ class AllAccounts(BaseModel):
     password: str
 
 
+class AddAddress(BaseModel):
+    user_id: str
+    address: str
+    city: str
+    state: str
+    pincode: str
+
+
+class UpdateAddress(BaseModel):
+    user_id: str
+    address_id: str
+    address: str
+    city: str
+    state: str
+    pincode: str
+
+
 # Response Schemas
 
 class AccountDetails(BaseModel):
@@ -52,6 +69,18 @@ class OrderDetails(BaseModel):
     email: str
     link: str
     time_stamp: datetime
+
+    class Config:
+        orm_mode = True
+
+
+class AddressDetails(BaseModel):
+    address_id: str
+    user_id: str
+    address: str
+    city: str
+    state: str
+    pincode: str
 
     class Config:
         orm_mode = True
