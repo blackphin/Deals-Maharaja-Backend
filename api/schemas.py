@@ -32,13 +32,20 @@ class AllAccounts(BaseModel):
     password: str
 
 
+class GetAddress(BaseModel):
+    user_id: str
+    email: str
+
+
 class DelAddress(BaseModel):
     user_id: str
+    email: str
     address_id: str
 
 
 class AddAddress(BaseModel):
     user_id: str
+    email: str
     address: str
     city: str
     state: str
@@ -48,6 +55,7 @@ class AddAddress(BaseModel):
 class UpdateAddress(BaseModel):
     user_id: str
     address_id: str
+    email: str
     address: str
     city: str
     state: str
