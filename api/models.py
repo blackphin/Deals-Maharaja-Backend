@@ -16,6 +16,7 @@ class Users(Base):
     email = Column(String, unique=True, nullable=False)
     phone = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
+    points = Column(Integer, nullable=False)
 
 
 class Orders(Base):

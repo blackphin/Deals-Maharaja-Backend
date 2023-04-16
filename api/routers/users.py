@@ -15,6 +15,7 @@ from database import engine, get_db
 
 router = APIRouter()
 
+
 @router.post("/login", status_code=status.HTTP_200_OK, response_model=schemas.AccountDetails)
 def login(payLoad: schemas.Login, db: Session = Depends(get_db)):
     user_data = db.query(models.Users).filter(

@@ -32,6 +32,11 @@ class AllAccounts(BaseModel):
     password: str
 
 
+class DelAddress(BaseModel):
+    user_id: int
+    address_id: int
+
+
 class AddAddress(BaseModel):
     user_id: str
     address: str
