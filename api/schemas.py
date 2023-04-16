@@ -33,8 +33,8 @@ class AllAccounts(BaseModel):
 
 
 class DelAddress(BaseModel):
-    user_id: int
-    address_id: int
+    user_id: str
+    address_id: str
 
 
 class AddAddress(BaseModel):

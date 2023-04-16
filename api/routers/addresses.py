@@ -39,6 +39,7 @@ def addAddress(payLoad: schemas.AddAddress, db: Session = Depends(get_db)):
                             detail="User Account not Found")
 
 
+@router.put
 @router.delete("/delete", status_code=status.HTTP_404_NOT_FOUND)
 def deleteAddress(payLoad: schemas.DelAddress, db: Session = Depends(get_db)):
     user_data = db.query(models.Users).filter(
@@ -53,7 +54,7 @@ def deleteAddress(payLoad: schemas.DelAddress, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Account Doesn't Exist")
 
-    elif (payLoad.address_id == address_data.first().address_id and payLoad.user_id == address_data.first().user_id):
+    elif (payLoad.address_id == str(address_data.first().address_id) and payLoad.user_id == str(address_data.first().user_id)):
         address_data.delete(synchronize_session=False)
         db.commit()
         return {"message": "Address Deleted"}

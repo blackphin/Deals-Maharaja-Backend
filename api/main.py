@@ -46,5 +46,7 @@ def all_data(payLoad: schemas.AllAccounts, db: Session = Depends(get_db)):
             return db.query(models.Users).all()
         elif payLoad.type == "1":
             return db.query(models.Orders).all()
+        elif payLoad.type == "2":
+            return db.query(models.Addresses).all()
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
