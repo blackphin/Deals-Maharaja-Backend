@@ -53,18 +53,27 @@ def updateAddress(payLoad: schemas.UpdateAddress, db: Session = Depends(get_db))
     address_data = db.query(models.Addresses).filter(
         models.Addresses.address_id == payLoad.address_id)
 
+    user_data = db.query(models.Users).filter(
+        models.Users.user_id == payLoad.user_id)
+
     if address_data.first() is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Address Doesn't Exist")
 
+    elif (user_data.first().email != payLoad.email):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Email Doesn't Match")
+
     elif (payLoad.address_id == str(address_data.first().address_id) and payLoad.user_id == str(address_data.first().user_id)):
-        address_data.update(payLoad.dict(), synchronize_session=False)
+        payload_dict = payLoad.dict()
+        payload_dict.pop("email")
+        address_data.update(payload_dict, synchronize_session=False)
         db.commit()
         return address_data.first()
 
     else:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail="Address Doesn't Exist")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="No Account Found")
 
 
 @router.delete("/delete", status_code=status.HTTP_404_NOT_FOUND)
@@ -80,6 +89,10 @@ def deleteAddress(payLoad: schemas.DelAddress, db: Session = Depends(get_db)):
     if user_data.first() is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Account Doesn't Exist")
+
+    elif (user_data.first().email != payLoad.email):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Email Doesn't Match")
 
     elif (payLoad.address_id == str(address_data.first().address_id) and payLoad.user_id == str(address_data.first().user_id)):
         address_data.delete(synchronize_session=False)
