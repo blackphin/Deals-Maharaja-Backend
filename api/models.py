@@ -19,6 +19,17 @@ class Users(Base):
     points = Column(Integer, nullable=False, server_default=text('0'))
 
 
+class Activity(Base):
+    __tablename__ = "activity"
+
+    time_stamp = Column(TIMESTAMP(timezone=True),
+                        nullable=False, server_default=text('now()'))
+    activity_id = Column(Integer, primary_key=True, nullable=False)
+    user_id = Column(Integer, nullable=False)
+    email = Column(String, nullable=False)
+    link = Column(String, nullable=False)
+
+
 class Orders(Base):
     __tablename__ = "orders"
 

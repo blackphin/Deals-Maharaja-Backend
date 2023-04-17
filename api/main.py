@@ -12,7 +12,7 @@ import models
 import schemas
 from database import engine, get_db
 from config import settings
-from routers import orders, users, addresses
+from routers import users, addresses, activity, orders
 
 app = FastAPI()
 
@@ -26,9 +26,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(orders.router)
 app.include_router(users.router)
 app.include_router(addresses.router)
+app.include_router(activity.router)
+app.include_router(orders.router)
 
 models.Base.metadata.create_all(bind=engine)
 # db: Session = Depends(get_db)

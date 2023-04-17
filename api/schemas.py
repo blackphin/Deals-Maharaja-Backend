@@ -4,6 +4,14 @@ from datetime import datetime
 
 # Request Schemas
 
+
+class AllAccounts(BaseModel):
+    type: str
+    password: str
+
+# Users
+
+
 class CreateAccount(BaseModel):
     first_name: str
     last_name: str
@@ -17,19 +25,7 @@ class Login(BaseModel):
     password: str
 
 
-class CreateOrder(BaseModel):
-    user_id: str
-    email: EmailStr
-    link: str
-
-
-class GetOrders(BaseModel):
-    user_id: str
-
-
-class AllAccounts(BaseModel):
-    type: str
-    password: str
+# Addresses
 
 
 class GetAddress(BaseModel):
@@ -62,7 +58,37 @@ class UpdateAddress(BaseModel):
     pincode: str
 
 
+# Activity
+
+
+class AddActivity(BaseModel):
+    user_id: str
+    email: EmailStr
+    link: str
+
+
+class GetActivity(BaseModel):
+    user_id: str
+    email: EmailStr
+
+
+# Orders
+
+class CreateOrder(BaseModel):
+    user_id: str
+    email: EmailStr
+    link: str
+
+
+class GetOrders(BaseModel):
+    user_id: str
+
+
 # Response Schemas
+
+
+# Users
+
 
 class AccountDetails(BaseModel):
     user_id: str
@@ -76,15 +102,7 @@ class AccountDetails(BaseModel):
         orm_mode = True
 
 
-class OrderDetails(BaseModel):
-    order_id: str
-    user_id: str
-    email: str
-    link: str
-    time_stamp: datetime
-
-    class Config:
-        orm_mode = True
+# Addresses
 
 
 class AddressDetails(BaseModel):
@@ -94,6 +112,34 @@ class AddressDetails(BaseModel):
     city: str
     state: str
     pincode: str
+
+    class Config:
+        orm_mode = True
+
+
+# Activity
+
+
+class ActivityDetails(BaseModel):
+    activity_id: str
+    user_id: str
+    email: str
+    link: str
+    time_stamp: datetime
+
+    class Config:
+        orm_mode = True
+
+
+# Orders
+
+
+class OrderDetails(BaseModel):
+    order_id: str
+    user_id: str
+    email: str
+    link: str
+    time_stamp: datetime
 
     class Config:
         orm_mode = True
