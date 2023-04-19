@@ -35,11 +35,12 @@ class Orders(Base):
 
     time_stamp = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
-    order_id = Column(Integer, primary_key=True, nullable=False)
-    # order_value = Column(Integer, nullable=False)
     user_id = Column(Integer, nullable=False)
     email = Column(String, nullable=False)
-    link = Column(String, nullable=False)
+    advertiser = Column(String, nullable=False)
+    order_id = Column(String, primary_key=True, nullable=False)
+    order_value = Column(Integer, nullable=False)
+    commision = Column(Integer, nullable=False)
 
 
 class Addresses(Base):

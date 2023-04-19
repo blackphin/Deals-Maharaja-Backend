@@ -22,7 +22,7 @@ def getAddresses(payLoad: schemas.GetAddress, db: Session = Depends(get_db)):
         models.Addresses.user_id == payLoad.user_id).all()
     user_data = db.query(models.Users).filter(
         models.Users.user_id == payLoad.user_id)
-    if addresses is None:
+    if (addresses is None or user_data is None):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="No Addresses Found")
     elif (user_data.first() is not None and user_data.first().email == payLoad.email):
@@ -56,7 +56,7 @@ def updateAddress(payLoad: schemas.UpdateAddress, db: Session = Depends(get_db))
     user_data = db.query(models.Users).filter(
         models.Users.user_id == payLoad.user_id)
 
-    if address_data.first() is None:
+    if (address_data.first() is None or user_data.first() is None):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Address Doesn't Exist")
 

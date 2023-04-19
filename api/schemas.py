@@ -77,11 +77,21 @@ class GetActivity(BaseModel):
 class CreateOrder(BaseModel):
     user_id: str
     email: EmailStr
-    link: str
+    order_id: str
+    advertiser: str
+    order_value: str
+    commision: str
 
 
 class GetOrders(BaseModel):
     user_id: str
+    email: str
+
+
+class VerifyOrder(BaseModel):
+    user_id: str
+    email: str
+    order_id: str
 
 
 # Response Schemas
@@ -135,11 +145,23 @@ class ActivityDetails(BaseModel):
 
 
 class OrderDetails(BaseModel):
+    time_stamp: datetime
     order_id: str
+    order_value: str
+    commision: str
     user_id: str
     email: str
-    link: str
-    time_stamp: datetime
+    advertiser: str
+
+    class Config:
+        orm_mode = True
+
+
+class OrderVerified(BaseModel):
+    order_id: str
+    order_value: str
+    commision: str
+    advertiser: str
 
     class Config:
         orm_mode = True

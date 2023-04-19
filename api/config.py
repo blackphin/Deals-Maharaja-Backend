@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     database_name: str
     database_url: str
     database_master_password: str
+    vite_secret_key: str
+    optimisemedia_api_key: str
+    optimisemedia_contact_id: str
 
     class Config:
         env_file = ".env"
