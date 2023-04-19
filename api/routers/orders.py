@@ -1,4 +1,7 @@
 from typing import List
+from datetime import datetime
+import requests
+import json
 
 from fastapi import FastAPI, Depends, Response, status, HTTPException, APIRouter
 from fastapi.params import Body
@@ -23,6 +26,20 @@ def getOrders(payLoad: schemas.GetOrders, db: Session = Depends(get_db)):
     if orders is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="No Orders Found")
+    # remove fromm here
+    print(orders[0].time_stamp.strftime("%m/%d/%Y, %H:%M:%S"))
+
+    url = "https://public.api.optimisemedia.com/v1/conversions?agencyId=95&contactId=2340252&fromDate=2023-04-01&toDate=2023-04-18&dateField=conversion"
+
+    payload = ""
+    headers = {
+        'apikey': '5ydj62ESZqHKckZMZwmbgef0hKSFAr7MSf9vnIEJk9Q='
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    list1 = json.loads(response.text)
+    print((list1[0]["conversionDate"]))
+    # till here
     return orders
 
 
@@ -41,3 +58,4 @@ def addOrder(payLoad: schemas.CreateOrder, db: Session = Depends(get_db)):
 
 # @router.post("/verify_order", status_code=status.HTTP_202_ACCEPTED)
 # def verifyOrder(payLoad: schemas.VerifyOrder, db: Session = Depends(get_db)):
+#     return 0

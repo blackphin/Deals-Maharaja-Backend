@@ -84,9 +84,7 @@ def deleteAddress(payLoad: schemas.DelAddress, db: Session = Depends(get_db)):
     address_data = db.query(models.Addresses).filter(
         models.Addresses.address_id == payLoad.address_id)
 
-    print(payLoad.address_id)
-
-    if user_data.first() is None:
+    if user_data.first() is None or address_data.first() is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Account Doesn't Exist")
 
