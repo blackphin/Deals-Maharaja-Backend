@@ -34,17 +34,19 @@ def getOrders(payLoad: schemas.GetOrders, db: Session = Depends(get_db)):
         return orders_data.all()
 
 
-# @router.post("/add", status_code=status.HTTP_201_CREATED, response_model=schemas.OrderDetails)
-# def addOrder(payLoad: schemas.CreateOrder, db: Session = Depends(get_db)):
-#     if (db.query(models.Users).filter(models.Users.user_id == payLoad.user_id).first() is not None):
-#         new_order = models.Orders(**payLoad.dict())
-#         db.add(new_order)
-#         db.commit()
-#         db.refresh(new_order)
-#         return new_order
-#     else:
-#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-#                             detail="User Account not Found")
+@router.post("/add", status_code=status.HTTP_201_CREATED, response_model=schemas.OrderDetails)
+def addOrder(payLoad: schemas.CreateOrder, db: Session = Depends(get_db)):
+    user_data = db.query(models.Users).filter(
+        models.Users.user_id == payLoad.user_id)
+    if (user_data.first() is not None and user_data.first().email == payLoad.email):
+        new_order = models.Orders(**payLoad.dict())
+        db.add(new_order)
+        db.commit()
+        db.refresh(new_order)
+        return new_order
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="User Account not Found")
 
 
 @router.post("/verify", status_code=status.HTTP_202_ACCEPTED, response_model=schemas.OrderVerified)
