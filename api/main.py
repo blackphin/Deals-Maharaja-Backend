@@ -12,7 +12,7 @@ import models
 import schemas
 from database import engine, get_db
 from config import settings
-from routers import users, addresses, activity, orders
+from routers import users, addresses, activity, orders, points
 
 app = FastAPI()
 
@@ -30,6 +30,7 @@ app.include_router(users.router)
 app.include_router(addresses.router)
 app.include_router(activity.router)
 app.include_router(orders.router)
+app.include_router(points.router)
 
 models.Base.metadata.create_all(bind=engine)
 # db: Session = Depends(get_db)

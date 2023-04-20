@@ -43,6 +43,19 @@ class Orders(Base):
     commision = Column(Integer, nullable=False)
 
 
+class PointsTransaction(Base):
+    __tablename__ = "points_transaction"
+
+    time_stamp = Column(TIMESTAMP(timezone=True),
+                        nullable=False, server_default=text('now()'))
+    user_id = Column(Integer, nullable=False)
+    email = Column(String, nullable=False)
+    transaction_id = Column(String, primary_key=True, nullable=False)
+    type = Column(Integer, nullable=False)
+    points = Column(Integer, nullable=False)
+    balance = Column(Integer, nullable=False)
+
+
 class Addresses(Base):
     __tablename__ = "addresses"
 

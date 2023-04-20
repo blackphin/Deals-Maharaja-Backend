@@ -127,6 +127,19 @@ class AddressDetails(BaseModel):
         orm_mode = True
 
 
+# Points
+
+class PointsTransactionDetails(BaseModel):
+    time_stamp: datetime
+    user_id: str
+    email: str
+    transaction_id: str
+    points: str
+
+    class Config:
+        orm_mode = True
+
+
 # Activity
 
 
