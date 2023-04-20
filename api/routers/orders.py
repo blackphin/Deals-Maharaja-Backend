@@ -43,6 +43,9 @@ def addOrder(payLoad: schemas.CreateOrder, db: Session = Depends(get_db)):
         db.add(new_order)
         db.commit()
         db.refresh(new_order)
+        user_data.update({"points": str(new_order.commision)},
+                         synchronize_session=False)
+        db.commit()
         return new_order
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
