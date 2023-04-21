@@ -20,6 +20,7 @@ router = APIRouter(
     prefix="/orders"
 )
 
+commision_percentage = 65/100
 
 @router.post("/get", status_code=status.HTTP_200_OK, response_model=List[schemas.OrderDetails])
 def getOrders(payLoad: schemas.GetOrders, db: Session = Depends(get_db)):
@@ -84,7 +85,7 @@ def verifyOrder(payLoad: schemas.VerifyOrder, db: Session = Depends(get_db)):
 
                     order_value = int(
                         converted_order["conversionValue"]["amount"])
-                    commision = int(converted_order["commission"]["amount"])
+                    commision = int(converted_order["commission"]["amount"])*commision_percentage
                     advertiser = converted_order["advertiserName"]
                     new_order_dict = {"user_id": payLoad.user_id, "email": payLoad.email, "order_id": order_id,
                                       "order_value": order_value, "commision": commision, "advertiser": advertiser}
