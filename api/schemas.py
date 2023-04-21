@@ -58,6 +58,14 @@ class UpdateAddress(BaseModel):
     pincode: str
 
 
+# Points
+
+
+class GetPoints(BaseModel):
+    user_id: str
+    email: str
+
+
 # Activity
 
 
@@ -134,7 +142,9 @@ class PointsTransactionDetails(BaseModel):
     user_id: str
     email: str
     transaction_id: str
+    type: str
     points: str
+    balance: str
 
     class Config:
         orm_mode = True

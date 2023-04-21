@@ -52,7 +52,7 @@ def addOrder(payLoad: schemas.CreateOrder, db: Session = Depends(get_db)):
                             detail="User Account not Found")
 
 
-@router.post("/verify", status_code=status.HTTP_202_ACCEPTED, response_model=schemas.OrderVerified)
+@router.post("/verify", status_code=status.HTTP_201_CREATED, response_model=schemas.OrderVerified)
 def verifyOrder(payLoad: schemas.VerifyOrder, db: Session = Depends(get_db)):
     now = datetime.now().strftime("%Y-%m-%d")
     user_data = db.query(models.Users).filter(
@@ -65,7 +65,7 @@ def verifyOrder(payLoad: schemas.VerifyOrder, db: Session = Depends(get_db)):
                             detail="User Account not Found")
     elif (user_data.first().email == payLoad.email):
         try:
-            url = f"https://public.api.optimisemedia.com/v1/conversions?agencyId=95&contactId={settings.optimisemedia_contact_id}&fromDate={now}&toDate={now}&dateField=conversion"
+            url = f"https://public.api.optimisemedia.com/v1/conversions?agencyId=95&contactId={settings.optimisemedia_contact_id}&fromDate=2023-04-01&toDate={now}&dateField=conversion"
             headers = {
                 'apikey': settings.optimisemedia_api_key
             }
@@ -85,7 +85,21 @@ def verifyOrder(payLoad: schemas.VerifyOrder, db: Session = Depends(get_db)):
                         converted_order["conversionValue"]["amount"])
                     commision = int(converted_order["commission"]["amount"])
                     advertiser = converted_order["advertiserName"]
-                    return {"order_id": order_id, "order_value": order_value, "commision": commision, "advertiser": advertiser}
+                    new_order = models.Orders({"user_id": payLoad.user_id, "email": payLoad.email, "order_id": order_id, "order_value": order_value,
+                                               "commision": commision, "advertiser": advertiser})
+                    db.add(new_order)
+                    db.commit()
+                    db.refresh(new_order)
+
+                    points = user_data.first().points + new_order.commision
+
+                    user_data.update({"points": points},
+                                     synchronize_session=False)
+                    db.add(models.PointsTransaction(
+                        {"user_id": payLoad.user_id, "email": payLoad.email, "points": str(new_order.commision), "type": "cr", "balance": points}))
+                    db.commit()
+
+                    return new_order
         except:
             raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                                 detail="Error in Optimise Media API")
