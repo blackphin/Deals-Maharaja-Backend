@@ -22,6 +22,7 @@ router = APIRouter(
 
 commision_percentage = 65/100
 
+
 @router.post("/get", status_code=status.HTTP_200_OK, response_model=List[schemas.OrderDetails])
 def getOrders(payLoad: schemas.GetOrders, db: Session = Depends(get_db)):
     orders_data = db.query(models.Orders).filter(
@@ -33,24 +34,6 @@ def getOrders(payLoad: schemas.GetOrders, db: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND, detail="No Orders Found")
     elif (user_data.first().email == payLoad.email):
         return orders_data.all()
-
-
-@router.post("/add", status_code=status.HTTP_201_CREATED, response_model=schemas.OrderDetails)
-def addOrder(payLoad: schemas.CreateOrder, db: Session = Depends(get_db)):
-    user_data = db.query(models.Users).filter(
-        models.Users.user_id == payLoad.user_id)
-    if (user_data.first() is not None and user_data.first().email == payLoad.email):
-        new_order = models.Orders(**payLoad.dict())
-        db.add(new_order)
-        db.commit()
-        db.refresh(new_order)
-        user_data.update({"points": str(new_order.commision)},
-                         synchronize_session=False)
-        db.commit()
-        return new_order
-    else:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail="User Account not Found")
 
 
 @router.post("/verify", status_code=status.HTTP_201_CREATED, response_model=schemas.OrderVerified)
@@ -85,7 +68,8 @@ def verifyOrder(payLoad: schemas.VerifyOrder, db: Session = Depends(get_db)):
 
                     order_value = int(
                         converted_order["conversionValue"]["amount"])
-                    commision = int(converted_order["commission"]["amount"])*commision_percentage
+                    commision = int(
+                        converted_order["commission"]["amount"])*commision_percentage
                     advertiser = converted_order["advertiserName"]
                     new_order_dict = {"user_id": payLoad.user_id, "email": payLoad.email, "order_id": order_id,
                                       "order_value": order_value, "commision": commision, "advertiser": advertiser}
