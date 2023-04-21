@@ -24,8 +24,8 @@ def getActivity(payLoad: schemas.GetPoints, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="No Account Found")
     elif (user_data.email == payLoad.email):
-        transaction_details = db.query(models.Points).filter(
-            models.Activity.user_id == payLoad.user_id).all()
+        transaction_details = db.query(models.PointsTransaction).filter(
+            models.PointsTransaction.user_id == payLoad.user_id).all()
         return transaction_details
     else:
         raise HTTPException(

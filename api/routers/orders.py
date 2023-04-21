@@ -64,45 +64,47 @@ def verifyOrder(payLoad: schemas.VerifyOrder, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="User Account not Found")
     elif (user_data.first().email == payLoad.email):
-        try:
-            url = f"https://public.api.optimisemedia.com/v1/conversions?agencyId=95&contactId={settings.optimisemedia_contact_id}&fromDate=2023-04-01&toDate={now}&dateField=conversion"
-            headers = {
-                'apikey': settings.optimisemedia_api_key
-            }
-            response = requests.request("GET", url, headers=headers, data="")
-            converted_orders = json.loads(response.text)
+        # try:
+        url = f"https://public.api.optimisemedia.com/v1/conversions?agencyId=95&contactId={settings.optimisemedia_contact_id}&fromDate=2023-04-01&toDate={now}&dateField=conversion"
+        headers = {
+            'apikey': settings.optimisemedia_api_key
+        }
+        response = requests.request("GET", url, headers=headers, data="")
+        converted_orders = json.loads(response.text)
 
-            for converted_order in converted_orders:
-                # conversion_time = parser.parse(
-                #     converted_order["conversionDate"]).astimezone().strftime("%m/%d/%Y, %H:%M:%S")
-                # click_time = parser.parse(
-                #     converted_order["clickDate"]).astimezone().strftime("%m/%d/%Y, %H:%M:%S")
-                # backend_click_time = activity_data.order_by(
-                #     models.Activity.activity_id.desc()).first().time_stamp.strftime("%m/%d/%Y, %H:%M:%S")
-                order_id = converted_order["advertiserRef"]
-                if (order_id == payLoad.order_id):
-                    order_value = int(
-                        converted_order["conversionValue"]["amount"])
-                    commision = int(converted_order["commission"]["amount"])
-                    advertiser = converted_order["advertiserName"]
-                    new_order = models.Orders({"user_id": payLoad.user_id, "email": payLoad.email, "order_id": order_id, "order_value": order_value,
-                                               "commision": commision, "advertiser": advertiser})
-                    db.add(new_order)
-                    db.commit()
-                    db.refresh(new_order)
+        for converted_order in converted_orders:
+            # conversion_time = parser.parse(
+            #     converted_order["conversionDate"]).astimezone().strftime("%m/%d/%Y, %H:%M:%S")
+            # click_time = parser.parse(
+            #     converted_order["clickDate"]).astimezone().strftime("%m/%d/%Y, %H:%M:%S")
+            # backend_click_time = activity_data.order_by(
+            #     models.Activity.activity_id.desc()).first().time_stamp.strftime("%m/%d/%Y, %H:%M:%S")
+            order_id = converted_order["advertiserRef"]
+            if (order_id == payLoad.order_id):
+                order_value = int(
+                    converted_order["conversionValue"]["amount"])
+                commision = int(converted_order["commission"]["amount"])
+                advertiser = converted_order["advertiserName"]
+                new_order_dict = {"user_id": payLoad.user_id, "email": payLoad.email, "order_id": order_id,
+                                  "order_value": order_value, "commision": commision, "advertiser": advertiser}
+                new_order = models.Orders(**new_order_dict)
+                db.add(new_order)
+                db.commit()
+                db.refresh(new_order)
 
-                    points = user_data.first().points + new_order.commision
+                points = user_data.first().points + new_order.commision
 
-                    user_data.update({"points": points},
-                                     synchronize_session=False)
-                    db.add(models.PointsTransaction(
-                        {"user_id": payLoad.user_id, "email": payLoad.email, "points": str(new_order.commision), "type": "cr", "balance": points}))
-                    db.commit()
+                user_data.update({"points": points},
+                                 synchronize_session=False)
+                transaction_data_dict = {"user_id": payLoad.user_id, "email": payLoad.email, "points": int(
+                    new_order.commision), "type": "cr", "balance": points}
+                db.add(models.PointsTransaction(**transaction_data_dict))
+                db.commit()
 
-                    return new_order
-        except:
-            raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                                detail="Error in Optimise Media API")
+                return new_order
+        # except:
+        #     raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+        #                         detail="Error in Optimise Media API")
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="No Account Found")

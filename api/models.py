@@ -50,8 +50,8 @@ class PointsTransaction(Base):
                         nullable=False, server_default=text('now()'))
     user_id = Column(Integer, nullable=False)
     email = Column(String, nullable=False)
-    transaction_id = Column(String, primary_key=True, nullable=False)
-    type = Column(Integer, nullable=False)
+    transaction_id = Column(Integer, primary_key=True, nullable=False)
+    type = Column(String, nullable=False)
     points = Column(Integer, nullable=False)
     balance = Column(Integer, nullable=False)
 
