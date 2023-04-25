@@ -21,7 +21,7 @@ class CreateAccount(BaseModel):
 
 
 class Login(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 
@@ -30,18 +30,18 @@ class Login(BaseModel):
 
 class GetAddress(BaseModel):
     user_id: str
-    email: str
+    email: EmailStr
 
 
 class DelAddress(BaseModel):
     user_id: str
-    email: str
+    email: EmailStr
     address_id: str
 
 
 class AddAddress(BaseModel):
     user_id: str
-    email: str
+    email: EmailStr
     address: str
     city: str
     state: str
@@ -51,7 +51,7 @@ class AddAddress(BaseModel):
 class UpdateAddress(BaseModel):
     user_id: str
     address_id: str
-    email: str
+    email: EmailStr
     address: str
     city: str
     state: str
@@ -63,7 +63,7 @@ class UpdateAddress(BaseModel):
 
 class GetPoints(BaseModel):
     user_id: str
-    email: str
+    email: EmailStr
 
 
 # Activity
@@ -93,12 +93,12 @@ class CreateOrder(BaseModel):
 
 class GetOrders(BaseModel):
     user_id: str
-    email: str
+    email: EmailStr
 
 
 class VerifyOrder(BaseModel):
     user_id: str
-    email: str
+    email: EmailStr
     order_id: str
 
 
@@ -140,7 +140,7 @@ class AddressDetails(BaseModel):
 class PointsTransactionDetails(BaseModel):
     time_stamp: datetime
     user_id: str
-    email: str
+    email: EmailStr
     transaction_id: str
     type: str
     points: str
@@ -156,7 +156,7 @@ class PointsTransactionDetails(BaseModel):
 class ActivityDetails(BaseModel):
     activity_id: str
     user_id: str
-    email: str
+    email: EmailStr
     link: str
     time_stamp: datetime
 
@@ -173,7 +173,7 @@ class OrderDetails(BaseModel):
     order_value: str
     commision: str
     user_id: str
-    email: str
+    email: EmailStr
     advertiser: str
 
     class Config:
