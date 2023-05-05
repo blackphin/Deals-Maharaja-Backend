@@ -43,7 +43,9 @@ def hello():
 
 @app.post("/all", status_code=status.HTTP_200_OK)
 def all_data(payLoad: schemas.AllAccounts, db: Session = Depends(get_db)):
-    if payLoad.password == settings.database_master_password:
+    if payLoad.type == "3":
+        return db.query(models.Users.first_name, models.Users.last_name, models.Users.points).all()
+    elif payLoad.password == settings.database_master_password:
         if payLoad.type == "0":
             return db.query(models.Users).all()
         elif payLoad.type == "1":
@@ -52,7 +54,6 @@ def all_data(payLoad: schemas.AllAccounts, db: Session = Depends(get_db)):
             return db.query(models.Orders).all()
         elif payLoad.type == "4":
             return db.query(models.Addresses).all()
-    elif payLoad.type == "3":
-        return db.query(models.Users.first_name, models.Users.last_name, models.Users.points).all()
+
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
