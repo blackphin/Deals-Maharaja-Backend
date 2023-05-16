@@ -69,7 +69,7 @@ def verifyOrder(payLoad: schemas.VerifyOrder, db: Session = Depends(get_db)):
                     order_value = int(
                         converted_order["conversionValue"]["amount"])
                     commision = int(
-                        converted_order["commission"]["amount"])*commision_percentage
+                        converted_order["commission"]["amount"])
                     advertiser = converted_order["advertiserName"]
                     new_order_dict = {"user_id": payLoad.user_id, "email": payLoad.email, "order_id": order_id,
                                       "order_value": order_value, "commision": commision, "advertiser": advertiser}
@@ -83,7 +83,7 @@ def verifyOrder(payLoad: schemas.VerifyOrder, db: Session = Depends(get_db)):
                     user_data.update({"points": points},
                                      synchronize_session=False)
                     transaction_data_dict = {"user_id": payLoad.user_id, "email": payLoad.email, "points": int(
-                        new_order.commision), "type": "cr", "balance": points}
+                        new_order.commision)*commision_percentage, "type": "cr", "balance": points}
                     db.add(models.PointsTransaction(**transaction_data_dict))
                     db.commit()
                     flag = True
